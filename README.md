@@ -119,3 +119,34 @@ The WHERE clause ensures only records where the plan is either a regular savings
 <h4>Resolution:</h4> A clearly defined business rule is needed. If not available, consider prioritizing one field over the other explicitly or handling it in a separate validation process.
 
 
+<h1>Assessment 4</h1>
+<h4>Per-Question Explanations:</h4>
+
+1.<h4>Selecting customer_id and name:</h4>
+
+<h4>Approach:</h4> Retrieve each customer’s unique identifier and full name using CONCAT(first_name, ' ', last_name).
+
+<h4>Purpose:</h4> Ensures that the results are human-readable and clearly identify each customer.
+
+2.<h4>Calculating tenure_months:</h4>
+
+<h4>Approach:</h4> Use TIMESTAMPDIFF(MONTH, cus.date_joined, CURDATE()) to calculate the number of months since the customer joined.
+
+<h4>Purpose:</h4> Tenure is essential to measure how long the customer has been active, which directly affects the CLV calculation.
+
+3.<h4>Counting total_transactions:</h4>
+
+<h4>Approach:</h4> Use COUNT(sav.transaction_date) to get the total number of transactions for each customer.
+
+<h4>Purpose:</h4> Total transaction count reflects customer engagement and is a key variable in estimating lifetime value.
+
+
+4.<h4>Joining Tables:</h4>
+
+<h4>Approach:</h4> Perform an inner join between the users_customuser and savings_savingsaccount tables on id and owner_id.
+
+<h4>Purpose:</h4> To link each customer with their transaction data.
+
+
+
+
