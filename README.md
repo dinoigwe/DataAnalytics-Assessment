@@ -31,11 +31,6 @@ GROUP BY ensures aggregation happens per user (identified by owner_id), and also
 
 <h4>Resolution:</h4> Removed the CASE from GROUP BY to just group by the user fields (owner_id, first_name, last_name), as that is sufficient for the aggregations required.
 
-<h3>Ambiguity in Plan Classification:</h3>
-
-<h4>Issue:</h4> It was not clear if a single plan could be both a regular savings and an investment fund. If so, this could lead to double-counting.
-
-<h4>Resolution:</h4> Assumed mutual exclusivity of plan types. If that’s not the case, additional clarification or logic would be required.
 
 
 <h1>Assessment 2</h1>
@@ -116,32 +111,32 @@ The WHERE clause ensures only records where the plan is either a regular savings
 
 <h4>Challenge: </h4>Both is_regular_savings and is_a_fund could potentially be '1'. It’s unclear which label should take precedence.
 
-<h4>Resolution:</h4> A clearly defined business rule is needed. If not available, consider prioritizing one field over the other explicitly or handling it in a separate validation process.
+<h4>Resolution:</h4> Using an ER Diagram to confirm the relationship of field between tables used.
 
 
 <h1>Assessment 4</h1>
 <h4>Per-Question Explanations:</h4>
 
-1.<h4>Selecting customer_id and name:</h4>
+1. <h4>Selecting customer_id and name:</h4>
 
 <h4>Approach:</h4> Retrieve each customer’s unique identifier and full name using CONCAT(first_name, ' ', last_name).
 
 <h4>Purpose:</h4> Ensures that the results are human-readable and clearly identify each customer.
 
-2.<h4>Calculating tenure_months:</h4>
+2. <h4>Calculating tenure_months:</h4>
 
 <h4>Approach:</h4> Use TIMESTAMPDIFF(MONTH, cus.date_joined, CURDATE()) to calculate the number of months since the customer joined.
 
 <h4>Purpose:</h4> Tenure is essential to measure how long the customer has been active, which directly affects the CLV calculation.
 
-3.<h4>Counting total_transactions:</h4>
+3. <h4>Counting total_transactions:</h4>
 
 <h4>Approach:</h4> Use COUNT(sav.transaction_date) to get the total number of transactions for each customer.
 
 <h4>Purpose:</h4> Total transaction count reflects customer engagement and is a key variable in estimating lifetime value.
 
 
-4.<h4>Joining Tables:</h4>
+4. <h4>Joining Tables:</h4>
 
 <h4>Approach:</h4> Perform an inner join between the users_customuser and savings_savingsaccount tables on id and owner_id.
 
