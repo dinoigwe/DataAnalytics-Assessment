@@ -40,8 +40,8 @@ GROUP BY ensures aggregation happens per user (identified by owner_id), and also
 
 <h1>Assessment 2</h1>
 <h4>Per-Question Explanations:</h4>
-1.<h1>Calculating Average Transactions Per Month</h1> 
-Approach:
+1.<h4>Calculating Average Transactions Per Month</h4> 
+<h4>Approach:</h4>
 I used COUNT(sav.transaction_date) to get the total number of transactions per customer, and divided it by the number of months since the customer joined using PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM CURDATE()), EXTRACT(YEAR_MONTH FROM cus.date_joined)).
 
 2. <h4>Categorizing Customers by Activity Frequency</h4>
@@ -59,11 +59,11 @@ I used a CASE statement to categorize customers based on their average monthly t
 <h4>Approach:</h4>
 I created a second CTE (frequency_counts) to COUNT(*) for each frequency_category from the first CTE.
 
-Reasoning:
+<h4>Reasoning:</h4>
 This helps in understanding the distribution of customer activity across the different categories.
 
 4. <h4>Joining for Final Output</h4>
-Approach:
+<h4>Approach:</h4>
 I joined the two CTEs (customer_activity and frequency_counts) on frequency_category to show:
 
 Customer’s activity category
@@ -72,7 +72,7 @@ Their average transactions per month
 
 Total number of customers in that category
 
-Reasoning:
+<h4>Reasoning:</h4>
 Provides both individual and aggregate views in a single output.
 
 ⚠️<h1> Challenges & Resolutions</h1>
@@ -83,4 +83,39 @@ Ensuring that the JOIN between users and savings accounts doesn't multiply rows 
 
 <h4>Resolution:</h4>
 Relied on the GROUP BY clause on cus.id and cus.date_joined to aggregate correctly before further calculations.
+
+
+
+<h1>Assessment 3</h1>
+<h4>Per-Question Explanations:</h4>
+
+1.<h4>What information is being retrieved?</h4>
+The query retrieves the plan ID, owner ID, plan type, the most recent transaction date, and the number of days since the last transaction from the savings system.
+
+2.<h4>How are plans categorized?</h4>
+Using a CASE expression:
+
+If is_regular_savings = '1', the plan is labeled as "savings".
+
+If is_a_fund = '1', the plan is labeled as "investment".
+
+3.<h4>How is inactivity determined?</h4>
+
+The MAX(save.transaction_date) identifies the last activity.
+
+DATEDIFF(CURRENT_DATE, MAX(...)) computes how many days have passed since that last activity.
+
+Only plans inactive for 365 days or more are selected via the HAVING clause.
+
+4.<h4>What filters are applied?</h4>
+
+The WHERE clause ensures only records where the plan is either a regular savings plan or a fund are considered.
+
+<h1>Challenges</h1>
+1.<h4>Ambiguity in plan classification</h4>
+
+<h4>Challenge: </h4>Both is_regular_savings and is_a_fund could potentially be '1'. It’s unclear which label should take precedence.
+
+<h4>Resolution:</h4> A clearly defined business rule is needed. If not available, consider prioritizing one field over the other explicitly or handling it in a separate validation process.
+
 
