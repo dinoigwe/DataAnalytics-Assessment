@@ -36,3 +36,68 @@ GROUP BY ensures aggregation happens per user (identified by owner_id), and also
 <h4>Issue:</h4> It was not clear if a single plan could be both a regular savings and an investment fund. If so, this could lead to double-counting.
 
 <h4>Resolution:</h4> Assumed mutual exclusivity of plan types. If that’s not the case, additional clarification or logic would be required.
+
+
+<h1>Assessment 2</h1>
+<h4>Per-Question Explanations:</h4>
+1. Calculating Average Transactions Per Month
+Approach:
+We used COUNT(sav.transaction_date) to get the total number of transactions per customer, and divided it by the number of months since the customer joined using PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM CURDATE()), EXTRACT(YEAR_MONTH FROM cus.date_joined)).
+
+Reasoning:
+This gives a normalized metric (average per month) for how active each customer is, regardless of when they joined.
+
+2. Categorizing Customers by Activity Frequency
+Approach:
+Used a CASE statement to categorize customers based on their average monthly transactions:
+
+≥ 10 → 'High Frequency'
+
+3–9 → 'Medium Frequency'
+
+< 3 → 'Low Frequency'
+
+Reasoning:
+These thresholds help segment users into intuitive buckets for analysis or targeting.
+
+3. Counting Customers per Frequency Category
+Approach:
+Created a second CTE (frequency_counts) to COUNT(*) for each frequency_category from the first CTE.
+
+Reasoning:
+This helps in understanding the distribution of customer activity across the different categories.
+
+4. Joining for Final Output
+Approach:
+Joined the two CTEs (customer_activity and frequency_counts) on frequency_category to show:
+
+Customer’s activity category
+
+Their average transactions per month
+
+Total number of customers in that category
+
+Reasoning:
+Provides both individual and aggregate views in a single output.
+
+⚠️ Challenges & Resolutions
+1. Division by Zero
+Challenge:
+The customer join duration (in months) could be zero, especially for customers who joined this month.
+
+Resolution:
+Used NULLIF(..., 0) to safely handle the denominator in the division, avoiding a division-by-zero error.
+
+2. Aggregation Logic with JOIN
+Challenge:
+Ensuring that the JOIN between users and savings accounts doesn't multiply rows unexpectedly.
+
+Resolution:
+Relied on the GROUP BY clause on cus.id and cus.date_joined to aggregate correctly before further calculations.
+
+3. Reusability of Derived Values
+Challenge:
+The average transactions per month was used multiple times (in both the SELECT and CASE clause).
+
+Resolution:
+Although it repeats in this version, in some systems (like PostgreSQL) you could use a subquery or WITH expression to calculate it once. Here, it's calculated in-place for compatibility and clarity.
