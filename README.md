@@ -35,7 +35,7 @@ GROUP BY ensures aggregation happens per user (identified by owner_id), and also
 
 <h1>Assessment 2</h1>
 <h4>Per-Question Explanations:</h4>
-1.<h4>Calculating Average Transactions Per Month</h4> 
+1.  <h4>Calculating Average Transactions Per Month</h4> 
 <h4>Approach:</h4>
 I used COUNT(sav.transaction_date) to get the total number of transactions per customer, and divided it by the number of months since the customer joined using PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM CURDATE()), EXTRACT(YEAR_MONTH FROM cus.date_joined)).
 
