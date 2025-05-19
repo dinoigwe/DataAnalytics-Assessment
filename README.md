@@ -3,7 +3,7 @@
 Per-Question Explanations:
 
 1. What is the purpose of the query?
-Answer
+ Answer
 The query is designed to report summary information per user about their involvement in savings and investment plans. It calculates:
 
 Total number of regular savings accounts.
@@ -12,7 +12,7 @@ Total number of investment accounts (referred to as "funds").
 
 Total confirmed deposit amount across these accounts.
 
-2. Why were certain joins used?
+2. <h4>Why were certain joins used?</h4>
 Answer
 The JOIN between users_customuser and savings_savingsaccount links each user to their savings accounts.
 
@@ -26,7 +26,7 @@ To focus the analysis only on users who have either savings or investment accoun
 Answer
 GROUP BY ensures aggregation happens per user (identified by owner_id), and also breaks down the totals based on the CASE condition — though this specific part could be optimized.
 
-📌 Challenges:
+ <h1>Challenges:</h1>
 
 Grouping by CASE Expression:
 
