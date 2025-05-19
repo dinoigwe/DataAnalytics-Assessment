@@ -70,7 +70,7 @@ Total number of customers in that category
 <h4>Reasoning:</h4>
 Provides both individual and aggregate views in a single output.
 
-⚠️<h1> Challenges & Resolutions</h1>
+<h1> Challenges & Resolutions</h1>
 
 1.<h4> Aggregation Logic with JOIN</h4>
 <h4>Challenge:</h4>
