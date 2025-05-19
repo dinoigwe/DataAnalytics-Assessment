@@ -20,27 +20,19 @@ The JOIN between savings_savingsaccount and plans_plan associates each account w
 3. <h4>Why include the WHERE clause on plan types?</h4>
 To focus the analysis only on users who have either savings or investment accounts (excluding accounts of other plan types that may exist).
 
-4.<h4> What’s the role of GROUP BY?</h4>
+4. <h4> What’s the role of GROUP BY?</h4>
 GROUP BY ensures aggregation happens per user (identified by owner_id), and also breaks down the totals based on the CASE condition — though this specific part could be optimized.
 
  <h1>Challenges:</h1>
 
-Grouping by CASE Expression:
+<h3>Grouping by CASE Expression:</h3>
 
-Issue: The query uses a CASE statement in the GROUP BY clause that is not referenced in the SELECT clause. This can lead to unexpected behavior or errors depending on the SQL dialect.
+<h4>Issue:</h4> The query uses a CASE statement in the GROUP BY clause that is not referenced in the SELECT clause. This can lead to unexpected behavior or errors depending on the SQL dialect.
 
-Resolution: Removed the CASE from GROUP BY to just group by the user fields (owner_id, first_name, last_name), as that is sufficient for the aggregations required.
+<h4>Resolution:</h4> Removed the CASE from GROUP BY to just group by the user fields (owner_id, first_name, last_name), as that is sufficient for the aggregations required.
 
-Ambiguity in Plan Classification:
+<h3>Ambiguity in Plan Classification:</h3>
 
-Issue: It was not clear if a single plan could be both a regular savings and an investment fund. If so, this could lead to double-counting.
+<h4>Issue:</h4> It was not clear if a single plan could be both a regular savings and an investment fund. If so, this could lead to double-counting.
 
-Resolution: Assumed mutual exclusivity of plan types. If that’s not the case, additional clarification or logic would be required.
-
-Optimization Concern:
-
-Issue: Multiple joins and aggregations could affect performance on large datasets.
-
-Resolution: Indexing on plan_id, owner_id, and confirmed_amount fields would help. Additionally, a CTE or subquery could simplify or improve readability and modularity.
-
-Let me know if you'd like a revised version of the SQL with these improvements or written as a report.
+<h4>Resolution:</h4> Assumed mutual exclusivity of plan types. If that’s not the case, additional clarification or logic would be required.
