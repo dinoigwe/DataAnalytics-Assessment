@@ -40,15 +40,15 @@ GROUP BY ensures aggregation happens per user (identified by owner_id), and also
 
 <h1>Assessment 2</h1>
 <h4>Per-Question Explanations:</h4>
-1. Calculating Average Transactions Per Month
+1.<h1>Calculating Average Transactions Per Month</h1> 
 Approach:
 We used COUNT(sav.transaction_date) to get the total number of transactions per customer, and divided it by the number of months since the customer joined using PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM CURDATE()), EXTRACT(YEAR_MONTH FROM cus.date_joined)).
 
-Reasoning:
+<h1>Reasoning:</h1>
 This gives a normalized metric (average per month) for how active each customer is, regardless of when they joined.
 
-2. Categorizing Customers by Activity Frequency
-Approach:
+2. <h1>Categorizing Customers by Activity Frequency</h1>
+<h1>Approach:</h1>
 Used a CASE statement to categorize customers based on their average monthly transactions:
 
 ≥ 10 → 'High Frequency'
@@ -57,17 +57,17 @@ Used a CASE statement to categorize customers based on their average monthly tra
 
 < 3 → 'Low Frequency'
 
-Reasoning:
+<h1>Reasoning:</h1>
 These thresholds help segment users into intuitive buckets for analysis or targeting.
 
-3. Counting Customers per Frequency Category
-Approach:
+3. <h1>Counting Customers per Frequency Category</h1>
+<h1>Approach:</h1>
 Created a second CTE (frequency_counts) to COUNT(*) for each frequency_category from the first CTE.
 
 Reasoning:
 This helps in understanding the distribution of customer activity across the different categories.
 
-4. Joining for Final Output
+4. <h1>Joining for Final Output</h1>
 Approach:
 Joined the two CTEs (customer_activity and frequency_counts) on frequency_category to show:
 
@@ -98,6 +98,3 @@ Relied on the GROUP BY clause on cus.id and cus.date_joined to aggregate correct
 3. Reusability of Derived Values
 Challenge:
 The average transactions per month was used multiple times (in both the SELECT and CASE clause).
-
-Resolution:
-Although it repeats in this version, in some systems (like PostgreSQL) you could use a subquery or WITH expression to calculate it once. Here, it's calculated in-place for compatibility and clarity.
